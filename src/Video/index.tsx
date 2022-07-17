@@ -37,15 +37,15 @@ export declare type HTTPResponse = {
 
 export declare type FileSystemUploadOptions = (
   | {
-      uploadType?: FileSystemUploadType.BINARY_CONTENT;
-    }
+  uploadType?: FileSystemUploadType.BINARY_CONTENT;
+}
   | {
-      uploadType: FileSystemUploadType.MULTIPART;
-      fieldName?: string;
-      mimeType?: string;
-      parameters?: Record<string, string>;
-    }
-) & {
+  uploadType: FileSystemUploadType.MULTIPART;
+  fieldName?: string;
+  mimeType?: string;
+  parameters?: Record<string, string>;
+}
+  ) & {
   headers?: Record<string, string>;
   httpMethod?: FileSystemAcceptedUploadHttpMethod;
   sessionType?: FileSystemSessionType;
@@ -117,8 +117,9 @@ export const cancelCompression = (cancellationId: string) => {
 
 const Video: VideoCompressorType = {
   compress: async (
-    fileUrl: string,
+    fileUrl: string[] | string,
     options?: videoCompresssionType,
+    quality?: string,
     onProgress?: (progress: number) => void
   ) => {
     const uuid = uuidv4();
@@ -159,10 +160,19 @@ const Video: VideoCompressorType = {
       if (options?.getCancellationId) {
         options?.getCancellationId(uuid);
       }
-      const result = await NativeVideoCompressor.compress(
-        fileUrl,
-        modifiedOptions
-      );
+      let result
+      if (Platform.OS === 'android') {
+        result = await NativeVideoCompressor.compress(
+          fileUrl,
+          modifiedOptions,
+          quality
+        );
+      } else {
+        result = await NativeVideoCompressor.compress(
+          fileUrl,
+          modifiedOptions
+        );
+      }
       return result;
     } finally {
       // @ts-ignore

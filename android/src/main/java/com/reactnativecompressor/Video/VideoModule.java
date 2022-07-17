@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
@@ -66,6 +67,7 @@ public class  VideoModule extends ReactContextBaseJavaModule {
     for (int i = 0; i < fileUris.size(); i++) {
       uris.add(Uri.parse(fileUris.getString(i)));
     }
+    String uuid = optionMap.getString("uuid");
     VideoQuality videoQuality = null;
     switch (quality) {
       case "VERY_LOW":
@@ -96,28 +98,43 @@ public class  VideoModule extends ReactContextBaseJavaModule {
       new Configuration(videoQuality, true, null, false, false, null, null),
       new CompressionListener() {
         @Override
-        public void onStart(int index, long size) {
+        public void onStart(int index) {
           // Compression start
         }
 
         @Override
-        public void onSuccess(int index, @Nullable String path) {
+        public void onSuccess(int index, long size, String path) {
           // On Compression success
+          WritableMap data = Arguments.createMap();
+          data.putInt("index", index);
+          data.putString("path", path);
+          promise.resolve(data);
         }
 
         @Override
         public void onFailure(int index, String failureMessage) {
           // On Failure
+          WritableMap data = Arguments.createMap();
+          data.putInt("index", index);
+          data.putString("path", failureMessage);
+          promise.reject(index + " " + failureMessage);
         }
 
         @Override
         public void onProgress(int index, float progressPercent) {
-          Log.d("ON PROGRESS", progressPercent + "");
+          WritableMap params = Arguments.createMap();
+          WritableMap data = Arguments.createMap();
+          params.putString("uuid", uuid);
+          data.putInt("index", index);
+          data.putDouble("progress", progressPercent);
+          params.putMap("data", data);
+          sendEvent(reactContext, "videoCompressProgress", params);
         }
 
         @Override
         public void onCancelled(int index) {
           // On Cancelled
+          promise.reject(index + " " + "canceled");
         }
       }
     );
