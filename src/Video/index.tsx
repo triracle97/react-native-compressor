@@ -130,7 +130,11 @@ const Video: VideoCompressorType = {
           'videoCompressProgress',
           (event: any) => {
             if (event.uuid === uuid) {
-              onProgress(event.data.progress);
+              if (Platform.os === 'android') {
+                onProgress(event.data);
+              } else {
+                onProgress(event.data.progress);
+              }
             }
           }
         );

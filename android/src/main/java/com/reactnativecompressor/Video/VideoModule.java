@@ -105,19 +105,31 @@ public class  VideoModule extends ReactContextBaseJavaModule {
         @Override
         public void onSuccess(int index, long size, String path) {
           // On Compression success
+          WritableMap params = Arguments.createMap();
           WritableMap data = Arguments.createMap();
           data.putInt("index", index);
+          data.putString("type", "success");
           data.putString("path", path);
-          promise.resolve(data);
+          params.putMap("data", data);
+          sendEvent(reactContext, "videoCompressProgress", params);
+          if (index == uris.size() - 1) {
+            promise.resolve("done");
+          }
         }
 
         @Override
         public void onFailure(int index, String failureMessage) {
           // On Failure
+          WritableMap params = Arguments.createMap();
           WritableMap data = Arguments.createMap();
           data.putInt("index", index);
+          data.putString("type", "failed");
           data.putString("path", failureMessage);
-          promise.reject(index + " " + failureMessage);
+          params.putMap("data", data);
+          sendEvent(reactContext, "videoCompressProgress", params);
+          if (index == uris.size() - 1) {
+            promise.resolve("done");
+          }
         }
 
         @Override
@@ -125,6 +137,7 @@ public class  VideoModule extends ReactContextBaseJavaModule {
           WritableMap params = Arguments.createMap();
           WritableMap data = Arguments.createMap();
           params.putString("uuid", uuid);
+          data.putString("type", "progress");
           data.putInt("index", index);
           data.putDouble("progress", progressPercent);
           params.putMap("data", data);
@@ -134,7 +147,15 @@ public class  VideoModule extends ReactContextBaseJavaModule {
         @Override
         public void onCancelled(int index) {
           // On Cancelled
-          promise.reject(index + " " + "canceled");
+          WritableMap params = Arguments.createMap();
+          WritableMap data = Arguments.createMap();
+          data.putString("type", "canceled");
+          data.putInt("index", index);
+          params.putMap("data", data);
+          sendEvent(reactContext, "videoCompressProgress", params);
+          if (index == uris.size() - 1) {
+            promise.resolve("done");
+          }
         }
       }
     );
