@@ -117,7 +117,7 @@ export const cancelCompression = (cancellationId: string) => {
 
 const Video: VideoCompressorType = {
   compress: async (
-    fileUrl: string[] | string,
+    fileUrl: string,
     options?: videoCompresssionType,
     quality?: string,
     onProgress?: (progress: number) => void
@@ -130,11 +130,7 @@ const Video: VideoCompressorType = {
           'videoCompressProgress',
           (event: any) => {
             if (event.uuid === uuid) {
-              if (Platform.os === 'android') {
-                onProgress(event.data);
-              } else {
-                onProgress(event.data.progress);
-              }
+              onProgress(event.data.progress);
             }
           }
         );
