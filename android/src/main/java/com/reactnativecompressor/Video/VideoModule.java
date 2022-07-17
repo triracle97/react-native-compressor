@@ -11,11 +11,19 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
+import com.abedelazizshe.lightcompressorlibrary.VideoCompressor;
+import com.abedelazizshe.lightcompressorlibrary.config.StorageConfiguration;
+import com.abedelazizshe.lightcompressorlibrary.config.Configuration;
+import com.abedelazizshe.lightcompressorlibrary.VideoQuality;
+import com.abedelazizshe.lightcompressorlibrary.CompressionListener;
 import com.reactnativecompressor.Utils.RealPathUtil;
+
+import java.util.ArrayList;
 
 import static com.reactnativecompressor.Utils.Utils.getRealPath;
 import static com.reactnativecompressor.Video.VideoCompressorHelper.video_activateBackgroundTask_helper;
@@ -50,22 +58,69 @@ public class  VideoModule extends ReactContextBaseJavaModule {
   //Video
   @ReactMethod
   public void compress(
-    String fileUrl,
+    ReadableArray fileUris,
     ReadableMap optionMap,
+    String quality,
     Promise promise) {
-    final VideoCompressorHelper options = VideoCompressorHelper.fromMap(optionMap);
-    fileUrl=getRealPath(fileUrl,reactContext);
-
-    if(options.compressionMethod==VideoCompressorHelper.CompressionMethod.auto)
-    {
-      VideoCompressorHelper.VideoCompressAuto(fileUrl,options,promise,reactContext);
+    ArrayList<Uri> uris = new ArrayList<Uri>();
+    for (int i = 0; i < fileUris.size(); i++) {
+      uris.add(Uri.parse(fileUris.getString(i)));
     }
-    else
-    {
-      VideoCompressorHelper.VideoCompressManual(fileUrl,options,promise,reactContext);
+    VideoQuality videoQuality = null;
+    switch (quality) {
+      case "VERY_LOW":
+        videoQuality = VideoQuality.VERY_LOW;
+        break;
+      case "LOW":
+        videoQuality = VideoQuality.LOW;
+        break;
+      case "MEDIUM":
+        videoQuality = VideoQuality.MEDIUM;
+        break;
+      case "HIGH":
+        videoQuality = VideoQuality.HIGH;
+        break;
+      case "VERY_HIGH":
+        videoQuality = VideoQuality.VERY_HIGH;
+        break;
     }
+    VideoCompressor.start(
+      reactContext,
+      uris,
+      true,
+      new StorageConfiguration(
+        null,
+        null,
+        false
+      ),
+      new Configuration(videoQuality, true, null, false, false, null, null),
+      new CompressionListener() {
+        @Override
+        public void onStart(int index, long size) {
+          // Compression start
+        }
 
+        @Override
+        public void onSuccess(int index, @Nullable String path) {
+          // On Compression success
+        }
 
+        @Override
+        public void onFailure(int index, String failureMessage) {
+          // On Failure
+        }
+
+        @Override
+        public void onProgress(int index, float progressPercent) {
+          Log.d("ON PROGRESS", progressPercent + "");
+        }
+
+        @Override
+        public void onCancelled(int index) {
+          // On Cancelled
+        }
+      }
+    );
   }
 
   @ReactMethod
