@@ -89,7 +89,7 @@ public class  VideoModule extends ReactContextBaseJavaModule {
       uris,
       true,
       new StorageConfiguration(
-        null,
+        "compress.mp4",
         null,
         false
       ),
@@ -134,10 +134,8 @@ public class  VideoModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void cancelCompression(
-    String uuid) {
-    cancelCompressionHelper(uuid);
-    Log.d("cancelCompression", uuid);
+  public void cancelCompression(String uuid)) {
+    VideoCompressor.cancel();
   }
 
   @ReactMethod
