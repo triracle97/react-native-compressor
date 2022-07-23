@@ -119,7 +119,6 @@ const Video: VideoCompressorType = {
   compress: async (
     fileUrl: string,
     options?: videoCompresssionType,
-    quality?: string,
     onProgress?: (progress: number) => void
   ) => {
     const uuid = uuidv4();
@@ -160,19 +159,10 @@ const Video: VideoCompressorType = {
       if (options?.getCancellationId) {
         options?.getCancellationId(uuid);
       }
-      let result
-      if (Platform.OS === 'android') {
-        result = await NativeVideoCompressor.compress(
-          fileUrl,
-          modifiedOptions,
-          quality
-        );
-      } else {
-        result = await NativeVideoCompressor.compress(
-          fileUrl,
-          modifiedOptions
-        );
-      }
+      const result = await NativeVideoCompressor.compress(
+        fileUrl,
+        modifiedOptions
+      );
       return result;
     } finally {
       // @ts-ignore

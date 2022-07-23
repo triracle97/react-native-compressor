@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		188666C92668C616006FF392 /* VideoCompressor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 188657BA26612A1D006FF392 /* VideoCompressor.swift */; };
+		9D42EDA4288BB695002190A7 /* LightCompressor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D42EDA3288BB695002190A7 /* LightCompressor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,6 +28,7 @@
 		188657B826612A1C006FF392 /* Compressor-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Compressor-Bridging-Header.h"; sourceTree = "<group>"; };
 		188657BA26612A1D006FF392 /* VideoCompressor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoCompressor.swift; sourceTree = "<group>"; };
 		18866CD1266E224C006FF392 /* Image */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Image; sourceTree = "<group>"; };
+		9D42EDA3288BB695002190A7 /* LightCompressor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LightCompressor.swift; sourceTree = "<group>"; };
 		B3E7B5881CC2AC0600A0062D /* Compressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Compressor.h; sourceTree = "<group>"; };
 		B3E7B5891CC2AC0600A0062D /* Compressor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Compressor.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -54,6 +56,7 @@
 			isa = PBXGroup;
 			children = (
 				188657BA26612A1D006FF392 /* VideoCompressor.swift */,
+				9D42EDA3288BB695002190A7 /* LightCompressor.swift */,
 			);
 			path = Video;
 			sourceTree = "<group>";
@@ -137,6 +140,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				188666C92668C616006FF392 /* VideoCompressor.swift in Sources */,
+				9D42EDA4288BB695002190A7 /* LightCompressor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

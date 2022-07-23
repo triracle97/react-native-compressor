@@ -61,26 +61,26 @@ public class  VideoModule extends ReactContextBaseJavaModule {
   public void compress(
     String fileUri,
     ReadableMap optionMap,
-    String quality,
     Promise promise) {
     ArrayList<Uri> uris = new ArrayList<Uri>();
     uris.add(Uri.parse(fileUri));
     String uuid = optionMap.getString("uuid");
+    String quality = optionMap.getString("quality")
     VideoQuality videoQuality = null;
     switch (quality) {
-      case "VERY_LOW":
+      case "very_low":
         videoQuality = VideoQuality.VERY_LOW;
         break;
-      case "LOW":
+      case "low":
         videoQuality = VideoQuality.LOW;
         break;
-      case "MEDIUM":
+      case "medium":
         videoQuality = VideoQuality.MEDIUM;
         break;
-      case "HIGH":
+      case "high":
         videoQuality = VideoQuality.HIGH;
         break;
-      case "VERY_HIGH":
+      case "very_high":
         videoQuality = VideoQuality.VERY_HIGH;
         break;
     }

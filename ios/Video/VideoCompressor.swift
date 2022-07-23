@@ -33,6 +33,7 @@ struct UploadError: Error {
 class VideoCompressor: RCTEventEmitter, URLSessionTaskDelegate {
   var backgroundTaskId: UIBackgroundTaskIdentifier = .invalid;
   var hasListener: Bool=false
+	var compression: Compression? = nil
   var uploadResolvers: [String: RCTPromiseResolveBlock] = [:]
   var uploadRejectors: [String: RCTPromiseRejectBlock] = [:]
   var compressorExports: [String: NextLevelSessionExporter] = [:]
@@ -205,47 +206,56 @@ func makeValidUri(filePath: String) -> String {
     }
   
   
-  func compressVideo(url: URL, options: [String: Any], onProgress: @escaping (Float) -> Void,  onCompletion: @escaping (URL) -> Void, onFailure: @escaping (Error) -> Void){
-      ImageCompressor.getAbsoluteVideoPath(url.absoluteString) { absoluteVideoPath in
-        var minimumFileSizeForCompress:Double=16.0;
-        let videoURL = URL(string: absoluteVideoPath!)
-        let fileSize=self.getfileSize(forURL: videoURL!);
-          if((options["minimumFileSizeForCompress"]) != nil)
-        {
-              minimumFileSizeForCompress=options["minimumFileSizeForCompress"] as! Double;
-        }
-        if(fileSize>minimumFileSizeForCompress)
-        {
-            if(options["compressionMethod"] as! String=="auto")
-            {
-                self.autoCompressionHelper(url: videoURL!, options:options) { progress in
-                    onProgress(progress)
-                } onCompletion: { outputURL in
-                    onCompletion(outputURL)
-                } onFailure: { error in
-                    onFailure(error)
-                }
-            }
-            else
-            {
-                self.manualCompressionHelper(url: videoURL!, options:options) { progress in
-                    onProgress(progress)
-                } onCompletion: { outputURL in
-                    onCompletion(outputURL)
-                } onFailure: { error in
-                    onFailure(error)
-                }
-            }
-            
-            
-
-        }
-        else
-        {
-            onCompletion(url)
-        }
-      }
-}
+	func compressVideo(url: URL, options: [String: Any], onProgress: @escaping (Float) -> Void,  onCompletion: @escaping (URL) -> Void, onFailure: @escaping (Error) -> Void){
+		let videoCompressor = LightCompressor()
+		let videoQuality: String = options["quality"] as String
+		let destPath = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("compress.mp4")
+		compression = videoCompressor.compressVideo(
+			source: URL(fileURLWithPath: url),
+			destination: destPath,
+			quality: getVideoQuality(quality: videoQuality),
+			isMinBitrateCheckEnabled: false,
+			progressQueue: .main,
+			progressHandler: { progress in
+				onProgress(progress)
+			},
+			completion: {[weak self] result in
+				guard let `self` = self else { return }
+			 
+				switch result {
+				case .onSuccess(let path):
+					// success
+					onCompletion(path)
+							 
+				case .onStart:
+					// when compression starts
+							 
+				case .onFailure(let error):
+					onFailure(error)
+					// failure error
+							 
+				case .onCancelled:
+					// if cancelled
+				}
+			})
+	}
+	
+	private func getVideoQuality(quality: String) -> VideoQuality{
+		switch quality {
+		case "very_low":
+			return VideoQuality.very_low
+		case "low":
+			return VideoQuality.low
+		case "medium":
+			return VideoQuality.medium
+		case "high":
+			return VideoQuality.high
+		case "very_high":
+			return VideoQuality.very_high
+		default:
+			return VideoQuality.medium
+		}
+	}
 
 
     func  makeVideoBitrate(originalHeight:Int,originalWidth:Int,originalBitrate:Int,height:Int,width:Int)->Int {
