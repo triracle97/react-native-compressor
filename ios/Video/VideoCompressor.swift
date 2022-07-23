@@ -199,7 +199,7 @@ func makeValidUri(filePath: String) -> String {
     let videoQuality: String = options["quality"] as! String
 		let destPath = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("compress.mp4")
 		compression = videoCompressor.compressVideo(
-      source: URL(fileURLWithPath: url.absoluteString),
+      source: url,
 			destination: destPath,
 			quality: getVideoQuality(quality: videoQuality),
 			isMinBitrateCheckEnabled: false,
