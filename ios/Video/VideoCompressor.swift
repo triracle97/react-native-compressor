@@ -219,9 +219,9 @@ func makeValidUri(filePath: String) -> String {
 					onFailure(error)
 					// failure error
         case .onStart:
-            print("On Start")
+          print("On Start")
         case .onCancelled:
-            print("On Cancelled")
+          onFailure(CompressionError(title: "CANCELED"))
         }
 			})
 	}
