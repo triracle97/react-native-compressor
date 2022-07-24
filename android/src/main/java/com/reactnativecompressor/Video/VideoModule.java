@@ -65,7 +65,7 @@ public class  VideoModule extends ReactContextBaseJavaModule {
     ArrayList<Uri> uris = new ArrayList<Uri>();
     uris.add(Uri.parse(fileUri));
     String uuid = optionMap.getString("uuid");
-    String quality = optionMap.getString("quality")
+    String quality = optionMap.getString("quality");
     VideoQuality videoQuality = null;
     switch (quality) {
       case "very_low":
@@ -134,7 +134,7 @@ public class  VideoModule extends ReactContextBaseJavaModule {
   }
 
   @ReactMethod
-  public void cancelCompression(String uuid)) {
+  public void cancelCompression(String uuid) {
     VideoCompressor.cancel();
   }
 

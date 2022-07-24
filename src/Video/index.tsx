@@ -21,6 +21,7 @@ type videoCompresssionType = {
   maxSize?: number;
   compressionMethod?: compressionMethod;
   minimumFileSizeForCompress?: number;
+  quality?: string;
   getCancellationId?: (cancellationId: string) => void;
 };
 
@@ -139,9 +140,11 @@ const Video: VideoCompressorType = {
         bitrate?: number;
         compressionMethod?: compressionMethod;
         maxSize?: number;
+        quality?: string;
         minimumFileSizeForCompress?: number;
       } = { uuid };
       if (options?.bitrate) modifiedOptions.bitrate = options?.bitrate;
+      if (options?.quality) modifiedOptions.quality = options?.quality;
       if (options?.compressionMethod) {
         modifiedOptions.compressionMethod = options?.compressionMethod;
       } else {
