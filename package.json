@@ -14,7 +14,7 @@
     "ios",
     "cpp",
     "app.plugin.js",
-    "react-native-compressor.podspec",
+    "react-native-compressor-forked.podspec",
     "!lib/typescript/example",
     "!android/build",
     "!ios/build",
