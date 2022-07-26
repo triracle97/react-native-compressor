@@ -76,7 +76,7 @@ class VideoCompressor: RCTEventEmitter, URLSessionTaskDelegate {
 
     @objc(cancelCompression:)
     func cancelCompression(uuid: String) -> Void {
-        compression.cancel = true
+        compression!.cancel = true
     }
 
 func makeValidUri(filePath: String) -> String {
