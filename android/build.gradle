@@ -58,7 +58,7 @@ dependencies {
   implementation "com.facebook.react:react-native:+"  // From node_modules
   implementation 'io.github.lizhangqu:coreprogress:1.0.2'
   implementation 'com.github.nomi9995:VideoCompressor:715bcc16e9'
-  implementation 'com.github.AbedElazizShe:LightCompressor:1.2.0'
+  implementation files('libs/lightcompressor.aar')
   implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3"
   implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3"
 //   implementation project(path: ':videocompressor')

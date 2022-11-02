@@ -1,6 +1,6 @@
 {
   "name": "react-native-compressor-forked",
-  "version": "1.6.10",
+  "version": "1.6.11",
   "description": "This library compress image, video and audio",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
