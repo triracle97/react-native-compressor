@@ -198,6 +198,13 @@ func makeValidUri(filePath: String) -> String {
 		let videoCompressor = LightCompressor()
     let videoQuality: String = options["quality"] as! String
 		let destPath = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("compress.mp4")
+		do {
+      if (FileManager.default.fileExists(atPath: destPath.path)) {
+        try FileManager.default.removeItem(atPath: destPath.path)
+      }
+    } catch {
+      print("Could not clear temp folder: \(error)")
+    }
 		compression = videoCompressor.compressVideo(
       source: url,
 			destination: destPath,
